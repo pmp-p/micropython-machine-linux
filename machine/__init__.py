@@ -36,7 +36,7 @@ def sleep_us(microseconds):
 from machine.gpio import GPIO, GPIOError
 from machine.led import LED, LEDError
 from machine.pwm import PWM, PWMError
-from machine.spi import SPI, SPIError
+from machine.spi import SPI
 from machine.i2c import I2C, I2CError
 from machine.mmio import MMIO, MMIOError
 from machine.serial import Serial, SerialError
