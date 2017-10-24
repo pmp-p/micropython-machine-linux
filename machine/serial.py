@@ -2,31 +2,53 @@ import os
 import fcntl
 import array
 import termios
-import select
+try:
+    import select
+except:
+    import uselect as select
 
 class SerialError(IOError):
     """Base class for Serial errors."""
     pass
 
 class Serial(object):
-    _DATABITS_TO_CFLAG = {
-        5: termios.CS5, 6: termios.CS6, 7: termios.CS7, 8: termios.CS8
-    }
-    _CFLAG_TO_DATABITS = {v: k for k, v in _DATABITS_TO_CFLAG.items()}
+    try:
+        _DATABITS_TO_CFLAG = {
+            5: termios.CS5, 6: termios.CS6, 7: termios.CS7, 8: termios.CS8
+        }
+    except AttributeError: 
+        _DATABITS_TO_CFLAG = {
+            5: 0, 6: 16, 7: 32, 8: 48
+        }
 
-    _BAUDRATE_TO_OSPEED = {
-        50: termios.B50, 75: termios.B75, 110: termios.B110, 134: termios.B134,
-        150: termios.B150, 200: termios.B200, 300: termios.B300,
-        600: termios.B600, 1200: termios.B1200, 1800: termios.B1800,
-        2400: termios.B2400, 4800: termios.B4800, 9600: termios.B9600,
-        19200: termios.B19200, 38400: termios.B38400, 57600: termios.B57600,
-        115200: termios.B115200, 230400: termios.B230400,
-        # Linux baudrates bits missing in termios module included below
-        460800: 0x1004, 500000: 0x1005, 576000: 0x1006,
-        921600: 0x1007, 1000000: 0x1008, 1152000: 0x1009,
-        1500000: 0x100A, 2000000: 0x100B, 2500000: 0x100C,
-        3000000: 0x100D, 3500000: 0x100E, 4000000: 0x100F,
-    }
+    
+    _CFLAG_TO_DATABITS = {v: k for k, v in _DATABITS_TO_CFLAG.items()}
+    try:
+        _BAUDRATE_TO_OSPEED = {
+            50: termios.B50, 75: termios.B75, 110: termios.B110, 134: termios.B134,
+            150: termios.B150, 200: termios.B200, 300: termios.B300,
+            600: termios.B600, 1200: termios.B1200, 1800: termios.B1800,
+            2400: termios.B2400, 4800: termios.B4800, 9600: termios.B9600,
+            19200: termios.B19200, 38400: termios.B38400, 57600: termios.B57600,
+            115200: termios.B115200, 230400: termios.B230400,
+            # Linux baudrates bits missing in termios module included below
+            460800: 0x1004, 500000: 0x1005, 576000: 0x1006,
+            921600: 0x1007, 1000000: 0x1008, 1152000: 0x1009,
+            1500000: 0x100A, 2000000: 0x100B, 2500000: 0x100C,
+            3000000: 0x100D, 3500000: 0x100E, 4000000: 0x100F,
+        }
+    except AttributeError:
+        _BAUDRATE_TO_OSPEED = {
+            50: 1, 75: 2, 110: 3, 134: 4,   150: 5, 200: 6, 300: 7, 600: 8, 1200: 9, 1800: 10,
+            2400: 11, 4800: 12, 9600: 13, 19200: 14, 38400: 15, 
+            57600: 4097, 115200: 4098, 230400: 4099,
+            # Linux baudrates bits missing in termios module included below
+            460800: 0x1004, 500000: 0x1005, 576000: 0x1006,
+            921600: 0x1007, 1000000: 0x1008, 1152000: 0x1009,
+            1500000: 0x100A, 2000000: 0x100B, 2500000: 0x100C,
+            3000000: 0x100D, 3500000: 0x100E, 4000000: 0x100F,
+        }
+    
     _OSPEED_TO_BAUDRATE = {v: k for k, v in _BAUDRATE_TO_OSPEED.items()}
 
     def __init__(self, devpath, baudrate, databits=8, parity="none", stopbits=1, xonxoff=False, rtscts=False):
