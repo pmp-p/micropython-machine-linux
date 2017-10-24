@@ -1,5 +1,7 @@
 # micropython-machine-linux
 
+*NB: requires mpycompat dist-packages and its modifications to os module*
+
 **just started nothing much done yet**
 
 GPIO : can blink on orange pi, will probably add lpt-gpio for pc later.
@@ -15,6 +17,9 @@ I2C: untested
 MMIO: untested
 
 Serial: untested
+
+
+.
 
 
 
