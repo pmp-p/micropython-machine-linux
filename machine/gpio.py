@@ -1,11 +1,27 @@
-import os
-import select
+try:
+    import os
+    import select
 
+except ImportError:
+    import os as os
+    import os.path
+    import uselect as select
+    IOError = OSError
+    
 class GPIOError(IOError):
     """Base class for GPIO errors."""
     pass
 
 class GPIO(object):
+
+    high = hi = 1
+    low = lo = 0
+    
+    IN = 'r'
+    OUT = 'w'
+    PULL_UP = 'h'
+    PULL_DOWN = None
+    
     def __init__(self, pin, direction="preserve"):
         """Instantiate a GPIO object and open the sysfs GPIO corresponding to
         the specified pin, with the specified direction.
@@ -306,4 +322,12 @@ class GPIO(object):
             return "GPIO %d (fd=%d, direction=%s, supports interrupts, edge=%s)" % (self._pin, self._fd, self.direction, self.edge)
 
         return "GPIO %d (fd=%d, direction=%s, no interrupts)" % (self._pin, self._fd, self.direction)
+
+
+
+
+
+
+
+
 
