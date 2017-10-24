@@ -1,6 +1,22 @@
 # micropython-machine-linux
 
-**this fork has just started so nothing is done yet**
+**just started nothing much done yet**
+
+GPIO : can blink on orange pi, will probably add lpt-gpio for pc later.
+
+LED: untested
+
+PWM: untested
+
+SPI: untested
+
+I2C: untested
+
+MMIO: untested
+
+Serial: untested
+
+
 
 ## Linux Peripheral I/O (GPIO, LED, PWM, SPI, I2C, MMIO, Serial) with Python 2 & 3
 
