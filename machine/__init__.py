@@ -13,14 +13,14 @@ if 0:
     except ImportError:
         import utime as time
         builtins.time =time
-       
+
 #        import uos as os
 #        sys.modules['os']=os
-        
+
         #builtins.IOError = OSError
-        
-    
-    
+
+
+
 def sleep(seconds):
     """Sleep for the specified number of seconds.
 
@@ -57,35 +57,25 @@ try:
     from machine.pwm import PWM, PWMError
 except ImportError as e:
     print("machine.pwm could not import :", e, file=sys.stderr)
-        
-from machine.spi import SPI
 
 try:
-    from machine.i2c import I2C, I2CError
+    from machine.spi import SPI
 except ImportError as e:
-    print("machine.pwm could not import :", e, file=sys.stderr)
+    print("machine.spi could not import :", e, file=sys.stderr)
+
+if UPY:
+    print("machine.i2c could not import :", file=sys.stderr)
+    I2C = None
+else:
+    from machine.i2c import I2C, I2CError
+
 
 try:
     from machine.mmio import MMIO, MMIOError
 except ImportError as e:
     print("machine.mmio could not import :", e, file=sys.stderr)
-    
+
 from machine.serial import Serial, SerialError
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def SUNXI_GPIO(pbanknum):

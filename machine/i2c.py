@@ -1,5 +1,8 @@
 import os
-import ctypes
+try:
+    import ctypes
+except:
+    import uctypes as ctypes
 import array
 import fcntl
 
